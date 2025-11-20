@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ShopMate — Mini E-Commerce</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">ShopMate</div>
+
+    <div class="search-area">
+      <input id="searchInput" type="search" placeholder="Search products, categories..." aria-label="Search products" />
+      <select id="sortSelect" aria-label="Sort products">
+        <option value="default">Sort</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+      </select>
+    </div>
+
+    <div class="header-actions">
+      <button id="cartBtn" class="btn cart-btn" aria-haspopup="dialog" aria-controls="cartModal">
+        🛒 Cart (<span id="cartCount">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <aside class="filters" aria-label="Product filters">
+      <div class="filter-block">
+        <h3>Categories</h3>
+        <ul id="categoryList" class="category-list">
+          <!-- Categories rendered by JS -->
+        </ul>
+      </div>
+
+      <div class="filter-block">
+        <h3>Max Price</h3>
+        <input id="priceRange" type="range" min="0" max="10000" step="50" aria-label="Price range" />
+        <div id="priceValue" class="price-value">Max: ₹0</div>
+      </div>
+    </aside>
+
+    <section class="product-area" aria-label="Products">
+      <div class="toolbar">
+        <div id="resultsCount" class="results-count"></div>
+      </div>
+
+      <div id="productsGrid" class="products-grid" aria-live="polite">
+        <!-- Products rendered by JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Cart Modal -->
+  <div id="cartModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+    <div class="modal-content">
+      <button id="closeCart" class="close" aria-label="Close cart">✕</button>
+      <h2 id="cartTitle">Your Cart</h2>
+      <div id="cartItems" class="cart-items">
+        <!-- Cart items rendered by JS -->
+      </div>
+
+      <div class="cart-footer">
+        <div class="subtotal">Subtotal: ₹<span id="cartTotal">0</span></div>
+        <div>
+          <button id="checkoutBtn" class="btn primary">Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product template (cloned by JS) -->
+  <template id="productTpl">
+    <article class="product-card">
+      <div class="thumb-wrap">
+        <img class="product-img" alt="product image" />
+      </div>
+      <div class="product-body">
+        <h4 class="product-title"></h4>
+        <div class="meta">
+          <span class="product-category"></span>
+          <span class="product-price"></span>
+        </div>
+        <p class="product-desc"></p>
+        <div class="product-actions">
+          <button class="btn add-to-cart">Add to cart</button>
+          <button class="btn secondary view-detail">View</button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
