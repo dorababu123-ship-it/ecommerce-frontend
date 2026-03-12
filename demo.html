@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopMate - Demo Mode</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1f2937;
+        }
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .product {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .product:hover {
+            transform: translateY(-4px);
+        }
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e5e7eb;
+        }
+        .product-content {
+            padding: 1.5rem;
+        }
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .product-category {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #059669;
+            margin-bottom: 1rem;
+        }
+        .product-desc {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        .status {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .retry-btn {
+            background: #059669;
+            margin-left: 1rem;
+        }
+        .retry-btn:hover {
+            background: #047857;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🛍️ ShopMate</div>
+        <div>
+            <button class="btn" onclick="retryBackend()">🔄 Try Backend Again</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="status" class="status">
+            🔄 Attempting to connect to backend server...
+        </div>
+
+        <h1 style="margin-bottom: 2rem;">Featured Products</h1>
+        <div id="products" class="products">
+            <!-- Products will be loaded here -->
+        </div>
+    </main>
+
+    <script>
+        // Demo products for fallback
+        const demoProducts = [
+            {
+                name: "Classic White T-Shirt",
+                price: 399,
+                category: "Clothing",
+                description: "Comfortable and stylish white t-shirt made from 100% cotton.",
+                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+            },
+            {
+                name: "Smart Watch",
+                price: 4999,
+                category: "Electronics",
+                description: "Feature-rich smartwatch with fitness tracking and smartphone integration.",
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+            },
+            {
+                name: "Running Shoes",
+                price: 2499,
+                category: "Footwear",
+                description: "High-performance running shoes with excellent cushioning.",
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+            },
+            {
+                name: "Leather Wallet",
+                price: 799,
+                category: "Accessories",
+                description: "Premium leather wallet with multiple card slots.",
+                image: "https://images.unsplash.com/photo-1549298916-b41d501d3772"
+            },
+            {
+                name: "Wireless Headphones",
+                price: 1299,
+                category: "Electronics",
+                description: "Premium wireless headphones with noise cancellation.",
+                image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
+            },
+            {
+                name: "Denim Jacket",
+                price: 1499,
+                category: "Clothing",
+                description: "Classic blue denim jacket with a modern fit.",
+                image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246"
+            }
+        ];
+
+        function renderProducts(products) {
+            const container = document.getElementById('products');
+            container.innerHTML = products.map(product => `
+                <div class="product">
+                    <img src="${product.image}" alt="${product.name}" class="product-img" 
+                         onerror="this.src='https://via.placeholder.com/300x200?text=Product'">
+                    <div class="product-content">
+                        <h3 class="product-title">${product.name}</h3>
+                        <span class="product-category">${product.category}</span>
+                        <div class="product-price">₹${product.price}</div>
+                        <p class="product-desc">${product.description}</p>
+                        <button class="btn" onclick="addToCart('${product.name}')">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(productName) {
+            alert(`Added ${productName} to cart! (Demo mode)`);
+        }
+
+        async function tryBackend() {
+            const status = document.getElementById('status');
+            try {
+                const response = await fetch('http://localhost:5000/api/products');
+                if (response.ok) {
+                    const data = await response.json();
+                    status.innerHTML = '✅ Connected to backend! Showing real products.';
+                    renderProducts(data.products);
+                    return true;
+                }
+            } catch (error) {
+                status.innerHTML = '❌ Backend not available. Showing demo products.';
+                return false;
+            }
+        }
+
+        async function retryBackend() {
+            const status = document.getElementById('status');
+            status.innerHTML = '🔄 Retrying backend connection...';
+            await tryBackend();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            const connected = await tryBackend();
+            if (!connected) {
+                renderProducts(demoProducts);
+            }
+        });
+    </script>
+</body>
+</html>

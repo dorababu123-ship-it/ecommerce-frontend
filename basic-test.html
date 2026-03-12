@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Test</title>
+</head>
+<body>
+    <h1>Basic HTML Test</h1>
+    <p>If you can see this, the browser is working.</p>
+    
+    <div id="test"></div>
+    
+    <script>
+        document.getElementById('test').innerHTML = 'JavaScript is working!';
+        
+        // Test fetch
+        fetch('https://jsonplaceholder.typicode.com/posts/1')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('test').innerHTML += '<br>Fetch API working: ' + data.title;
+            })
+            .catch(error => {
+                document.getElementById('test').innerHTML += '<br>Fetch error: ' + error.message;
+            });
+    </script>
+</body>
+</html>

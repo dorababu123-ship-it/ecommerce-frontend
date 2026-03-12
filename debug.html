@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    <div id="status">Testing connection...</div>
+    
+    <script>
+        async function testConnection() {
+            const status = document.getElementById('status');
+            status.innerHTML = 'Testing...';
+            
+            try {
+                // Test 1: Basic connection
+                const response1 = await fetch('http://localhost:5000/', {
+                    mode: 'cors'
+                });
+                status.innerHTML += '<br>✅ Basic connection: ' + response1.status;
+                
+                // Test 2: Products API
+                const response2 = await fetch('http://localhost:5000/api/products', {
+                    mode: 'cors'
+                });
+                
+                if (response2.ok) {
+                    const data = await response2.json();
+                    status.innerHTML += '<br>✅ Products API: ' + data.products.length + ' products found';
+                    status.innerHTML += '<br><br><strong>✅ Backend is working!</strong>';
+                    status.innerHTML += '<br><a href="index.html" style="background: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Main App</a>';
+                } else {
+                    status.innerHTML += '<br>❌ Products API failed: ' + response2.status;
+                }
+                
+            } catch (error) {
+                status.innerHTML += '<br>❌ Error: ' + error.message;
+                status.innerHTML += '<br><br><strong>Troubleshooting:</strong>';
+                status.innerHTML += '<br>1. Make sure backend is running on port 5000';
+                status.innerHTML += '<br>2. Check for CORS issues';
+                status.innerHTML += '<br>3. Check browser console for errors';
+                status.innerHTML += '<br><br>Try refreshing the page or check the backend server.';
+            }
+        }
+        
+        testConnection();
+    </script>
+</body>
+</html>

@@ -40,6 +40,31 @@ body{
   color:var(--accent);
 }
 
+/* Header Actions */
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.auth-section, .user-section{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.user-name{
+  font-weight:500;
+  color:var(--muted);
+  margin-right:8px;
+}
+
+.auth-btn{
+  padding:6px 12px;
+  font-size:0.875rem;
+  border-radius:6px;
+}
+
 /* Search area */
 .search-area{
   display:flex;
@@ -217,9 +242,129 @@ body{
   cursor: pointer;
 }
 
-.pagination button.active-page {
+.pagination button.active {
   background: #0b69ff;
   color: white;
   border-color: #0b69ff;
   font-weight: 600;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #f8f9fa;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-dots {
+  padding: 0 8px;
+  color: #6b7280;
+}
+
+/* Authentication Forms */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0b69ff;
+  box-shadow: 0 0 0 3px rgba(11, 105, 255, 0.1);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.auth-switch a {
+  color: #0b69ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+/* Cart item styles */
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.cart-item-price {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-btn {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover {
+  background: #f8f9fa;
+}
+
+.remove-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  background: #dc2626;
+}
+
+.cart-empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 20px;
 }

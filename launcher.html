@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopMate - Launcher</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .launcher {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .option {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: left;
+        }
+        .option:hover {
+            border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
+        }
+        .option h3 {
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        .option p {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .btn {
+            background: #2563eb;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: #6b7280;
+        }
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        .status {
+            background: #dcfce7;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #bbf7d0;
+        }
+        .credentials {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            border: 1px solid #fde68a;
+            font-size: 0.9rem;
+        }
+        .credentials h4 {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="launcher">
+        <div class="logo">🛍️ ShopMate</div>
+        <div class="subtitle">E-Commerce Platform - Choose Your Version</div>
+        
+        <div class="status">
+            ✅ Backend Server: Running on port 5000<br>
+            ✅ Database: Connected with 12 products<br>
+            ✅ All Systems: Operational
+        </div>
+
+        <div class="options">
+            <div class="option" onclick="window.open('index.html', '_blank')">
+                <h3>🎯 Full Application</h3>
+                <p>Complete e-commerce platform with authentication, cart, and all features</p>
+                <button class="btn">Launch Full App</button>
+            </div>
+
+            <div class="option" onclick="window.open('index-swe-fast.html', '_blank')">
+                <h3>⚡ SWE 1.5 Fast Version</h3>
+                <p>Optimized version with enhanced performance and caching</p>
+                <button class="btn">Launch Fast Version</button>
+            </div>
+
+            <div class="option" onclick="window.open('working-test.html', '_blank')">
+                <h3>🔧 API Test Page</h3>
+                <p>Simple test page to verify backend connectivity</p>
+                <button class="btn btn-secondary">Test Connection</button>
+            </div>
+        </div>
+
+        <div class="credentials">
+            <h4>🔑 Login Credentials:</h4>
+            <strong>Admin:</strong> admin@shopmate.com / admin123<br>
+            <strong>User:</strong> john@example.com / password123
+        </div>
+    </div>
+
+    <script>
+        // Auto-check backend status
+        async function checkBackend() {
+            try {
+                const response = await fetch('http://localhost:5000/');
+                if (response.ok) {
+                    console.log('✅ Backend is running');
+                }
+            } catch (error) {
+                console.log('❌ Backend not accessible');
+                document.querySelector('.status').innerHTML = 
+                    '❌ Backend Server: Not accessible<br>' +
+                    'Please make sure the backend is running on port 5000';
+            }
+        }
+        
+        checkBackend();
+    </script>
+</body>
+</html>

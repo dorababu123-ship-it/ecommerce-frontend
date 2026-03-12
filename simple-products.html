@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .product { border: 1px solid #ccc; padding: 20px; margin: 10px 0; border-radius: 8px; }
+        .product h3 { margin: 0 0 10px 0; color: #333; }
+        .product .price { color: green; font-weight: bold; }
+        .product .category { background: #f0f0f0; padding: 5px 10px; border-radius: 15px; display: inline-block; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>🛍️ ShopMate Products</h1>
+    <div id="products">
+        Loading products...
+    </div>
+
+    <script>
+        // Simple product data
+        const products = [
+            { name: "T-Shirt", price: 399, category: "Clothing" },
+            { name: "Smart Watch", price: 4999, category: "Electronics" },
+            { name: "Running Shoes", price: 2499, category: "Footwear" },
+            { name: "Headphones", price: 1299, category: "Electronics" },
+            { name: "Wallet", price: 799, category: "Accessories" }
+        ];
+
+        function showProducts() {
+            console.log('Showing products...');
+            const container = document.getElementById('products');
+            
+            let html = '';
+            products.forEach(product => {
+                html += `
+                    <div class="product">
+                        <h3>${product.name}</h3>
+                        <div class="category">${product.category}</div>
+                        <div class="price">$${product.price}</div>
+                        <button onclick="alert('Added ${product.name} to cart!')">Add to Cart</button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            console.log('Products rendered!');
+        }
+
+        // Test if this runs
+        console.log('Script loaded');
+        
+        // Show products when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', showProducts);
+        } else {
+            showProducts();
+        }
+    </script>
+</body>
+</html>

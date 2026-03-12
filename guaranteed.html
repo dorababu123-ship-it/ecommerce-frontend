@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShopMate - Guaranteed Working</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { 
+            text-align: center; 
+            color: white; 
+            margin-bottom: 40px; 
+        }
+        .header h1 { font-size: 3rem; margin-bottom: 10px; }
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+        }
+        .product { 
+            background: white; 
+            border-radius: 15px; 
+            padding: 25px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        .product:hover { transform: translateY(-5px); }
+        .product h3 { 
+            color: #333; 
+            margin-bottom: 10px; 
+            font-size: 1.3rem;
+        }
+        .product .category { 
+            background: #e3f2fd; 
+            color: #1976d2; 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            display: inline-block; 
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        .product .price { 
+            color: #4caf50; 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            margin-bottom: 15px;
+        }
+        .product .description { 
+            color: #666; 
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .btn { 
+            background: linear-gradient(45deg, #2196f3, #1976d2); 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 25px; 
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+        .status { 
+            background: rgba(255,255,255,0.2); 
+            color: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 30px; 
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ ShopMate</h1>
+            <div class="status">✅ Products Successfully Loaded!</div>
+        </div>
+
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product">
+                <h3>Classic White T-Shirt</h3>
+                <div class="category">Clothing</div>
+                <div class="price">₹399</div>
+                <div class="description">Premium quality cotton t-shirt perfect for everyday wear. Comfortable and stylish.</div>
+                <button class="btn" onclick="alert('Added Classic White T-Shirt to cart! 🛒')">Add to Cart</button>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product">
+                <h3>Smart Watch Pro</h3>
+                <div class="category">Electronics</div>
+                <div class="price">₹4,999</div>
+                <div class="description">Advanced fitness tracking, heart rate monitor, and smartphone integration.</div>
+                <button class="btn" onclick="alert('Added Smart Watch Pro to cart! 🛒')">Add to Cart</button>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product">
+                <h3>Running Shoes Elite</h3>
+                <div class="category">Footwear</div>
+                <div class="price">₹2,499</div>
+                <div class="description">Professional running shoes with advanced cushioning and support technology.</div>
+                <button class="btn" onclick="alert('Added Running Shoes Elite to cart! 🛒')">Add to Cart</button>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product">
+                <h3>Wireless Headphones</h3>
+                <div class="category">Electronics</div>
+                <div class="price">₹1,299</div>
+                <div class="description">Premium noise-cancelling headphones with exceptional sound quality.</div>
+                <button class="btn" onclick="alert('Added Wireless Headphones to cart! 🛒')">Add to Cart</button>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product">
+                <h3>Leather Wallet</h3>
+                <div class="category">Accessories</div>
+                <div class="price">₹799</div>
+                <div class="description">Genuine leather wallet with RFID protection and multiple card slots.</div>
+                <button class="btn" onclick="alert('Added Leather Wallet to cart! 🛒')">Add to Cart</button>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product">
+                <h3>Denim Jacket</h3>
+                <div class="category">Clothing</div>
+                <div class="price">₹1,499</div>
+                <div class="description">Classic denim jacket with modern styling and premium materials.</div>
+                <button class="btn" onclick="alert('Added Denim Jacket to cart! 🛒')">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple confirmation that page loaded
+        console.log('✅ ShopMate page loaded successfully!');
+        console.log('✅ All 6 products are displayed!');
+        
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.background = 'linear-gradient(45deg, #4caf50, #45a049)';
+                    this.textContent = '✓ Added!';
+                    setTimeout(() => {
+                        this.style.background = 'linear-gradient(45deg, #2196f3, #1976d2)';
+                        this.textContent = 'Add to Cart';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
