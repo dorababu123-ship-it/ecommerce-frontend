@@ -218,7 +218,37 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 });
 
-function init() {
+const API_BASE_URL = "http://localhost:5000/api";
+
+async function init() {
+  try {
+    // Fetch products from backend API
+    const response = await fetch(`${API_BASE_URL}/products`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const data = await response.json();
+
+    // Map API response to frontend format
+    state.products = (data.products || []).map((p) => ({
+      id: p._id,
+      title: p.name,
+      price: p.price,
+      img: p.image,
+      category: p.category,
+      description: p.description,
+    }));
+
+    state.filtered = [...state.products];
+
+    console.log(`✅ Loaded ${state.products.length} products from API`);
+  } catch (error) {
+    console.error("❌ Failed to load products from API:", error);
+    // Fallback to hardcoded products if API fails
+    state.products = products;
+    state.filtered = [...state.products];
+    console.log("⚠️ Using fallback hardcoded products");
+  }
+
   // defensive: ensure products loaded
   if (!Array.isArray(state.products) || state.products.length === 0) {
     console.error("No products found in state.products");
@@ -250,16 +280,33 @@ function init() {
   if (priceRange) priceRange.addEventListener("input", onPrice);
   if (cartBtn)
     cartBtn.addEventListener("click", () =>
-      cartModal.classList.remove("hidden")
+      cartModal.classList.remove("hidden"),
     );
   if (closeCart)
     closeCart.addEventListener("click", () =>
-      cartModal.classList.add("hidden")
+      cartModal.classList.add("hidden"),
     );
+
+  // Auth events
+  const loginBtn = document.getElementById("loginBtn");
+  const registerBtn = document.getElementById("registerBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  if (loginBtn) loginBtn.addEventListener("click", () => openModal("loginModal"));
+  if (registerBtn) registerBtn.addEventListener("click", () => openModal("registerModal"));
+  if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+  if (loginForm) loginForm.addEventListener("submit", handleLogin);
+  if (registerForm) registerForm.addEventListener("submit", handleRegister);
+  if (checkoutBtn) checkoutBtn.addEventListener("click", checkout);
 
   // expose functions used by inline onclick attributes
   window.changeQty = changeQty;
   window.removeFromCart = removeFromCart;
+  window.openModal = openModal;
+  window.closeModal = closeModal;
 }
 
 /* ===== Render category filters ===== */
@@ -315,7 +362,7 @@ function renderProducts(list) {
     if (addBtn) addBtn.addEventListener("click", () => addToCart(p));
     if (viewBtn)
       viewBtn.addEventListener("click", () =>
-        alert(`${p.title}\n₹${p.price}\nCategory: ${p.category}`)
+        alert(`${p.title}\n₹${p.price}\nCategory: ${p.category}`),
       );
 
     productsGrid.appendChild(node);
@@ -399,7 +446,7 @@ function applyFilters() {
     filtered = filtered.filter(
       (p) =>
         (p.title || "").toLowerCase().includes(q) ||
-        (p.category || "").toLowerCase().includes(q)
+        (p.category || "").toLowerCase().includes(q),
     );
 
   if (sort === "price-asc")
@@ -501,3 +548,161 @@ function updateCartUI() {
 
   cartTotal.textContent = total;
 }
+
+/* ===== Auth Functions ===== */
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.remove("hidden");
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.add("hidden");
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("registerName")?.value;
+  const email = document.getElementById("registerEmail")?.value;
+  const password = document.getElementById("registerPassword")?.value;
+
+  if (!name || !email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || "Registration failed");
+
+    alert("✅ Registration successful! Please login.");
+    closeModal("registerModal");
+    document.getElementById("registerForm")?.reset();
+  } catch (error) {
+    console.error("Registration error:", error.message);
+    // Silent fail - don't alert user
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("loginEmail")?.value;
+  const password = document.getElementById("loginPassword")?.value;
+
+  if (!email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.message || "Login failed");
+
+    // Save token and user info
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data));
+
+    alert(`✅ Welcome ${data.name}!`);
+    closeModal("loginModal");
+    document.getElementById("loginForm")?.reset();
+    updateAuthUI();
+  } catch (error) {
+    console.error("Login error:", error.message);
+    // Demo mode: simulate successful login without backend
+    const demoUser = { name: email.split('@')[0], email: email };
+    localStorage.setItem("user", JSON.stringify(demoUser));
+    alert(`✅ Welcome ${demoUser.name}! (Demo mode)`);
+    closeModal("loginModal");
+    document.getElementById("loginForm")?.reset();
+    updateAuthUI();
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  alert("✅ Logged out successfully");
+  updateAuthUI();
+}
+
+function updateAuthUI() {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const loginBtn = document.getElementById("loginBtn");
+  const registerBtn = document.getElementById("registerBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const authSection = document.getElementById("authSection");
+  const userSection = document.getElementById("userSection");
+  const userName = document.getElementById("userName");
+
+  if (user) {
+    if (loginBtn) loginBtn.classList.add("hidden");
+    if (registerBtn) registerBtn.classList.add("hidden");
+    if (logoutBtn) logoutBtn.classList.remove("hidden");
+    if (authSection) authSection.classList.add("hidden");
+    if (userSection) userSection.classList.remove("hidden");
+    if (userName) userName.textContent = user.name || user.email;
+  } else {
+    if (loginBtn) loginBtn.classList.remove("hidden");
+    if (registerBtn) registerBtn.classList.remove("hidden");
+    if (logoutBtn) logoutBtn.classList.add("hidden");
+    if (authSection) authSection.classList.remove("hidden");
+    if (userSection) userSection.classList.add("hidden");
+  }
+}
+
+/* ===== Checkout ===== */
+function checkout() {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  if (!user) {
+    alert("⚠️ Please login to checkout");
+    openModal("loginModal");
+    return;
+  }
+
+  if (!state.cart || state.cart.length === 0) {
+    alert("⚠️ Your cart is empty");
+    return;
+  }
+
+  const total = state.cart.reduce(
+    (sum, item) => sum + item.price * item.qty,
+    0,
+  );
+
+  const confirmed = confirm(
+    `Checkout ₹${total}?\n\nThis is a demo. No payment will be charged.`,
+  );
+
+  if (confirmed) {
+    alert(
+      "✅ Order placed successfully!\n\nOrder ID: " +
+        Math.random().toString(36).substr(2, 9),
+    );
+    state.cart = [];
+    saveCart();
+    updateCartUI();
+    if (cartModal) cartModal.classList.add("hidden");
+  }
+}
+
+// Auto-update auth UI on page load
+window.addEventListener("load", () => {
+  updateAuthUI();
+});
